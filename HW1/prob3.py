@@ -24,14 +24,20 @@ def generate(interval, m, deviation):
 		ytrain[i] = 2*xtrain_1[i] - xtrain_2[i] + np.random.normal(0, 0.01)
 	return np.asmatrix(xtrain), ytrain
 
-def closed_form(X, y):
-	xtx = np.matmul(X.T, X)
-	xtx = xtx.I
-	xtx1xt = np.matmul(xtx, X.T)
-	closed = np.matmul(xtx1xt, y)
+def closed_form(X, y, k):
+	if k > len(X):
+		print('k too large')
+	#print(X[:k])
+	X = X[:k]
+	y = y[:k]
+	#print(len(X))
+	xtrans_x = np.matmul(X.T, X)
+	xtrans_xinv = xtrans_x.I
+	xtrans_xinv_xtrans = np.matmul(xtrans_xinv, X.T)
+	closed = np.matmul(xtrans_xinv_xtrans, y)
 	return closed
 
-
+#def gradient_descent():
 
 
 
