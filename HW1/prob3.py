@@ -27,16 +27,11 @@ def generate(interval, m, deviation):
 def closed_form(X, y):
 	xtx = np.matmul(X.T, X)
 	xtx = xtx.I
-	print(xtx)
 	xtx1xt = np.matmul(xtx, X.T)
 	closed = np.matmul(xtx1xt, y)
-	print(closed)
 	return closed
 
 
 
-train_set, values = generate((-1, 1), 1000000, 0.1)
-print(len(train_set))
-print(len(train_set[1]))
-closed_form(train_set, values)
+
 
