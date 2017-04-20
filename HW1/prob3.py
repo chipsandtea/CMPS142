@@ -21,14 +21,22 @@ def generate(interval, m, deviation):
 
 	for i in range(m):
 		xtrain.append([xtrain_1[i], xtrain_2[i]])
-	return np.asarray(xtrain), ytrain
+		ytrain[i] = 2*xtrain_1[i] - xtrain_2[i] + np.random.normal(0, 0.01)
+	return np.asmatrix(xtrain), ytrain
+
+def closed_form(X, y):
+	xtx = np.matmul(X.T, X)
+	xtx = xtx.I
+	print(xtx)
+	xtx1xt = np.matmul(xtx, X.T)
+	closed = np.matmul(xtx1xt, y)
+	print(closed)
+	return closed
 
 
 
-
-def closed_form(m, k, x, y, deviation):
-	print('x')
-
-train_set, values = generate((-1, 1), 10000, 0.1)
+train_set, values = generate((-1, 1), 1000000, 0.1)
 print(len(train_set))
 print(len(train_set[1]))
+closed_form(train_set, values)
+
