@@ -21,7 +21,7 @@ def generate(interval, m, deviation):
 
 	for i in range(m):
 		xtrain.append([xtrain_1[i], xtrain_2[i]])
-	return xtrain, ytrain
+	return np.asarray(xtrain), ytrain
 
 
 
