@@ -5,13 +5,14 @@
 \newtheorem{claim}[theorem]{Claim}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
-\graphicspath{{graphs/}}
+\graphicspath{{imgs/}}
 
 \begin{document}
 
 \begin{center}
 {\bf\Large CMPS 142 --- Spring Quarter 2017 --  Homework 1}\\
-{\bf Christopher Hsiao - chhsiao@ucsc.edu - 1398305}
+{\bf Christopher Hsiao - chhsiao@ucsc.edu - 1398305}\\
+{\bf Aidan Gadberry - agadberr@ucsc.edu}
 \end{center}
 
 \section*{Solution to Problem 1}
@@ -105,6 +106,39 @@ Putting it all together, we get:
 1.848\\
 -0.897
 \end{bmatrix}\]
-\textbf{e.)} //TODO
+\textbf{e.)}
+During Batch Gradient Descent, the order with which the rows (examples) are seen doesn't matter, since every example will be seen every iteration anyway. Reordering the parameters would definitely impact the model with respect to the features they're representing. For example, a quadratic function will have different weights associated with the features, but features would have different degrees.
+
+\section*{Experiments on Linear Regression\\}
+\textbf{(a)} Closed form solution for Linear Regression\\
+\textbf{Training Set Error\\}
+$k = 10$: t1 error: 0.00251713330282 t2 error:0.000288814927052\\
+$k = 100$: t1 error: 0.000366640819671 t2 error:0.00177654927121\\
+$k = 1000$: t1 error: 3.03489776154e-05 t2 error:0.000749918991201\\
+$k = 10000$: t1 error: 0.00016024779446 t2 error:0.000143860751203\\
+
+\textbf{Test Set Error\\}
+$k = 10$: t1 error: -0.0103056950245 t2 error:-0.000254256403195\\
+$k = 100$: t1 error: -0.000472129192032 t2 error:-0.00248682014886\\
+$k = 1000$: t1 error: 0.00101928449978 t2 error:-0.000520347427673\\
+$k = 10000$: t1 error: 0.00016024779446 t2 error:0.000143860751203\\
+
+By calculating the closed form solution to the problem, we found that the closed form does a pretty good job at estimating $\theta$, with fairly small error. As $k$ increases, the accuracy of the algorithm increases with $k$ as well.
+
+\textbf{(b)}
+\begin{center}
+\includegraphics[width=10cm,height=10cm,keepaspectratio]{3b} \end{center}
+
+Clearly, since we have a smaller learning rate as we progress, the number of iterations required to reach the minima will increase by a factor of 10 (as we vary our $\alpha$ by 10). The error actually plateaus in comparison with the closed form solution, primarily because of the fact that the closed form solution doesn't reach the same levels of accuracy as the smaller learning rates enable when randomly selecting from the data sets. \\
+\\
+\textbf{(c)} Sophisticated Step Sizes:\\
+This algorithm takes 22193 iterations. The $\epsilon$ difference in this hypothesis and the closed solution is: $[-1.10E-4, 5.37E-4]$
+
+\section*{Titanic}
+In order to predict the odds of survival of a passenger with 100\% accuracy, one can simply look up the logs of passengers on the Titanic, and simply resort to table look up.\\
+
+This implies that Machine learning is not always the best way to go about approaching a problem first, and that there may be underlying structure to your problem that you're simply not noticing.
+
+
 
 \end{document}

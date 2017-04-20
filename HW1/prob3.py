@@ -37,6 +37,28 @@ def closed_form(X, y, k):
 	closed = np.matmul(xtrans_xinv_xtrans, y)
 	return closed
 
+# GRADIENT DESCENT
+
+
+def gradientDescent(x, y, theta, alpha, m, numIterations):
+    N = len(x)
+    w = np.zeros((x.shape[1], 1))
+    eta = alpha
+    old = np.zeros(shape=(1000, 1))
+    old = np.asmatrix(old)
+    count = 0
+    while True:
+    	error = x*w - y
+    	if (2-w[0]) < 0.001:
+    		#print(2-w[0])
+    		break
+    	if eta > 0.001:
+    		eta /= 2
+    	gradient = x.T * error / N
+    	w = w - eta * gradient
+    	count += 1
+    	#print(count)
+    return w, count
 #def gradient_descent():
 
 
