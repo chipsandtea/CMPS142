@@ -14,6 +14,9 @@
 \end{center}
 \noindent $\mathbf{Jacob\;Katzeff}$\\
 \noindent $\mathbf{Student\;ID\;1426015}$\\
+\\
+\noindent $\mathbf{Christopher\;Hsiao}$\\
+\noindent $\mathbf{Student\;ID\;1398305}$\\
 
 \section*{1. Logistic Regression}
 
@@ -86,6 +89,33 @@ There is a very significant change in the weight values for all features. This i
 
 Clearly, when ridge parameter values get very large, significant accuracy in the model is lost. This is because we severely penalize the weights, to the point where the weights are unable to adequately describe the relationship of the features, and thus are unable to generalize to new examples.\\
 
-\noindent $f.$ 3NN and 5NN have accuracies $72.6563\%$ and $73.1771\%$ respectively, which is a decent improvement over 1NN, which has accuracy $70.1823\%$. The highest accuracy is found at 7NN ($k = 7$), which boasts an accuracy of $74.7396\%$. 8NN ($k = 8$) is where the accuracy begins to decrease.
+\noindent $f.$ 3NN and 5NN have accuracies $72.6563\%$ and $73.1771\%$ respectively, which is a decent improvement over 1NN, which has accuracy $70.1823\%$. The highest accuracy is found at 7NN ($k = 7$), which boasts an accuracy of $74.7396\%$. 8NN ($k = 8$) is where the accuracy begins to decrease.\\
+
+\noindent $g.$ We would expect the accuracy to decrease for 1NN and Naive Bayes, because their accuracies can be affected by noise or unnecessary data. 1NN calculations would be thrown off because the "nearest neighbor" isn't actually the nearest, especially since the dimensionality is so drastically increased.\\
+
+\noindent Naive Bayes would significantly over-represent the repeated feature, since it doesn't consider features in conjunction with one another, and treats them as independent of other features.\\
+
+\noindent Logistic Regression, we think, would assign every instance of the repeated feature the same weight. Perhaps this means that the influence over the outcome is the same as if there were only once instance of the feature?\\
+
+\noindent Here are the accuracies of each algorithm over the modified dataset.
+\begin{itemize}
+\item 1NN: $66.1458\%$
+\item NB: $68.8802\%$
+\item LG: $77.2135\%$
+\end{itemize}
+As we had predicted, the accuracies for 1NN and NB suffered rather dramatically, while accuracy for LG stayed the same.\\
+
+\noindent $h.$ Here are the accuracies of each algorithm over the modified dataset.
+\begin{itemize}
+\item 1NN: $60.8073\%$
+\item NB: $74.349\%$
+\item LG: $75.651\%$
+\end{itemize}
+
+\noindent We observe that 1NN decreased pretty substantially, even compared to its accuracy in part $(4g)$. Decrease in accuracy is definitely expected, because not only do we inject noise, we also greatly increase the dimensionality of the problem (even more so than in part $4g$).\\
+
+\noindent Naive Bayes does slightly worse, compared to its performance without the added noise and dimensionality of $76.3021\%$. This is due to the fact that the value of these 20 extra attributes is Normally distributed between $(0, 1)$. Thus, it is reasonable to expect that for every extra feature value, it's complement (or something relatively close to it) shows up later to balance things out, and render the attribute insignificant. Since it's unreasonable for this to happen to every single extra weight as this is a finite dataset, we do suffer a relatively small penalty of $\approx 2\%$.\\
+
+\noindent Logistic Regression also suffers slightly, compared to its performance without the added attributes of $77.2135\%$. Our reasoning is that, similar to the way feature values mostly "balance out" to insignificance in NB, the same occurs in LR. In this case, it implies that for every penalty made to the weight of a feature, it's reasonable to expect that a value for that feature in a different example will reward the weight of the feature by the same amount. Again, since this is a finite dataset, it's unreasonable to expect this to occur often enough to yield actually nullify the negative impact of the extra features.
 
 \end{document}
