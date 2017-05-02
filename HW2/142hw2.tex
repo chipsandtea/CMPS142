@@ -1,0 +1,91 @@
+\documentclass[11pt]{article}
+\usepackage{fullpage,amsthm,amsfonts,amssymb,epsfig,amsmath,times,amsthm,mathtools,enumitem,amsmath,graphicx}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}[theorem]{Claim}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\newcommand{\abs}[1]{\mid#1\mid}
+\begin{document}
+
+\begin{center}
+{\bf\Large CMPS142 Homework 2}
+\end{center}
+\noindent $\mathbf{Jacob\;Katzeff}$\\
+\noindent $\mathbf{Student\;ID\;1426015}$\\
+
+\section*{1. Logistic Regression}
+
+\noindent $p(1 | x,w)=\frac{\text{exp }\mathbf{w}\cdot \mathbf{x}}{1+\text{exp }\mathbf{w}\cdot \mathbf{x}}$ and $p(1 | x,w)=1-p(0|x,w)$
+
+\noindent $\iff p(0 | x,w)=1-\frac{\text{exp }\mathbf{w}\cdot \mathbf{x}}{1+\text{exp }\mathbf{w}\cdot \mathbf{x}}=\frac{1}{1+\text{exp }\mathbf{w}\cdot \mathbf{x}}$
+
+\noindent $\iff \frac{p(1 | x,w)}{p(0 | x,w)}=\frac{\frac{\text{exp }\mathbf{w}\cdot \mathbf{x}}{1+\text{exp }\mathbf{w}\cdot \mathbf{x}}}{\frac{1}{1+\text{exp }\mathbf{w}\cdot \mathbf{x}}}=\text{exp }\mathbf{w}\cdot\mathbf{x}$
+
+\noindent $\iff \text{ln}\frac{p(1 | x,w)}{p(0 | x,w)}=\text{ln }\text{exp }\mathbf{w}\cdot\mathbf{x}=\mathbf{w}\cdot\mathbf{x}$
+
+\noindent Thus, the definitions for $p(0 | x,w)$ and $p(1 | x,w)$ are equivalent to defining $\mathbf{w}\cdot\mathbf{x}$ as the log-odds, $\text{ln}\frac{p(1 | x,w)}{p(0 | x,w)}$.
+
+\section*{2. Bayesian Probabilities}
+
+\noindent $a.$ The outcome space is $\{\{B,B\},\{G,B\},\{B,G\},\{G,G\}\}$, where the first index in each set is the younger. The atomic events are the individual sets inside the outcome space: $\{B,B\}, \{B,G\},\{G,B\},\{G,G\}$.
+
+\noindent $b.$ There are three atomic events in which the neighbor has a girl. In only two of these is the other child a boy. Therefore, the probability is $\frac{2}{3}$.
+
+\noindent $c.$ There are two atomic events in which the older child is a girl. In only one of these is the younger a boy. Therefore, the probability is $\frac{1}{2}$.
+
+\noindent $d.$ This is the same question as part $b$. We are given that one child is a girl, and we don't know if they are younger or older. There are 3 atomic events in which a child is a girl, and only two of those events has a boy as the other child. Therefore, the probability is $\frac{2}{3}$.
+
+\section*{3. Independence of Random Variables}
+
+\noindent $\text{E} [VW]= \sum\limits_{i=1}^{\infty}\sum\limits_{j=1}^{\infty} v_{i}w_{j}p_{i,j}$. But since $V$ and $W$ are independent, $p_{i,j}=p_{i}p_{j}$.
+
+\noindent So $\sum\limits_{i=1}^{\infty}\sum\limits_{j=1}^{\infty} v_{i}w_{j}p_{i,j}=\sum\limits_{i=1}^{\infty}\sum\limits_{j=1}^{\infty}v_{i}w_{j}p_{i}p_{j}=\sum\limits_{i=1}^{\infty}v_{i}p_{i}\sum\limits_{j=1}^{\infty}w_{j}p_{j}=\text{E}[V]\text{E}[W]$.
+
+\section*{4. Weka Experiments}
+\noindent $a.$ The accuracies and explanations of running \texttt{Nearest Neighbor}, \texttt{Naive Bayes} and \texttt{Logistic Regression} on the diabetes dataset are as follows:
+\begin{enumerate}
+\item Nearest Neighbor: $100\%$\\
+Nearest Neighbor wins out, because there isn't actually a model it is attempting to generalize. Since we are using the training set as the test set, it simply finds the example with the set of features it sees, for every set of features.
+\item Logistic Regression: $78.2552\%$\\
+Logistic Regression attempts to generalize by finding a point of max confusion and seeing where the examples fall around the sigmoid function. Such an approach could easily lead to false positives/negatives, as just because certain people may have feature values correlated to diabetes doesn't mean they are guaranteed to have the disease.
+\item Naive Bayes: $76.3021\%$\\
+Naive Bayes assumes that parameters are independent of each other (hence, the "naive"). Since the features collected are largely biometric data, it is fairly likely that there is some relationship between the features, and that values for certain values of an example may have an impact on values of other features of the same example. 
+\end{enumerate}
+
+\noindent $b.$ The linear function $\sum_{i} w_i \cdot x_i + bias$ has the weight vector:
+\begin{center}$w = [-0.1232, -0.0352, 0.0133, -0.0006, 0.0012, -0.0897, -0.9452, -0.0149]^T$\end{center}
+
+
+\noindent $c.$ After running the experiments in part $(a.)$ with 10-fold Cross Validation for our test option, the accuracies and explanations are as follows.
+\begin{enumerate}
+\item Logistic Regression: $77.2135\%$\\
+I think the slight decrease in accuracy from part $(4a)$ is because in 10-fold CV, each iteration of the model sees $\frac{1}{10}^{th}$ the data, thus making the model less accurate (theoretically). As a result, the average of 10 very slightly worse models yields a slightly worse model overall. 
+\item Naive Bayes: $76.3021\%$\\
+Note that the accuracy of Naive Bayes did not change at all with respect to its accuracy in part $(4a)$. This is because Naive Bayes locates (is calculates a better word) the Probability Distribution of each feature of each example to the outcome stays consistent, regardless of which order you see the examples in. Since the model inevitably sees every example, the probability distribution assigned to each feature in the model is the same as in part $(4a)$.
+\item Nearest Neighbor: $70.1823\%$\\
+Clearly, Nearest Neighbor suffered the most, with an accuracy loss of $29.8177\%$. This makes perfect sense, since in 10-fold CV, part of the examples are omitted. Thus, a fairly often number of times, the model can't locate the \textit{best} example to associate the seen features with. 
+\end{enumerate}
+
+\noindent $d.$ After normalizing the dataset, all of the feature values fell between $0$ and $1$.\\
+
+The accuracy of the three algorithms stayed exactly the same. This is because the value of the features of the examples are distributed the same way in the normalized range $[0, 1]$ compared to their distributions in each features respective original range.\\
+
+There is a very significant change in the weight values for all features. This is because when the dataset was normalized, their values were all forced within the range $[0, 1]$. As a result, there is a significant reduction in the disparity between feature values. Thus, this disparity does not need to be represented in the weights, and the weights can thus more closely represent the relationship between features, and their influence over the prediction.\\
+\pagebreak
+
+\noindent $e.$ Below details the impact each ridge parameter had on the CV Accuracies and Weights of models.
+\begin{itemize}
+\item $0$: Accuracy and Weights stayed the same as in the $(4c)$ model - $77.2135\%$.
+\item $1$: While Accuracy stayed the same, the weights on each feature for the most part were just slightly smaller across the board.
+\item $10$: While Accuracy stayed the same, the weights on each feature were dramatically smaller this time around.
+\item $100$: Now, not only is the trend of the weights becoming much smaller, but the accuracy is lowered substantially to $74.6094\%$
+\item $1000$: Now, not only are the weights significantly reduced (not a single weight value > 1), but the accuracy has tanked to $65.1042\%$. 
+\end{itemize}
+
+Clearly, when ridge parameter values get very large, significant accuracy in the model is lost. This is because we severely penalize the weights, to the point where the weights are unable to adequately describe the relationship of the features, and thus are unable to generalize to new examples.\\
+
+\noindent $f.$ 3NN and 5NN have accuracies $72.6563\%$ and $73.1771\%$ respectively, which is a decent improvement over 1NN, which has accuracy $70.1823\%$. The highest accuracy is found at 7NN ($k = 7$), which boasts an accuracy of $74.7396\%$. 8NN ($k = 8$) is where the accuracy begins to decrease.
+
+\end{document}
