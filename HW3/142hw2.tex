@@ -99,10 +99,41 @@ $P(\neg AP|H) = \dfrac{P(\neg AP \kern .1cm and \kern .1cm H)}{P(H)} = \dfrac{\f
 $P(\neg AP|N) = \dfrac{P(\neg AP \kern .1cm and \kern .1cm N)}{P(N)} = \dfrac{\frac{4}{9}}{\frac{6}{9}} = \dfrac{2}{3}$
 \end{center}
 
-\noindent Probability of 
+\noindent Predict Honor or Normal given AP and GPA:\newline
+
+To predict if a student is a Honor or Normal student given AP and a Gausian distribution of the GPA. The decision boundary for Honor and Normal will be the same. This means the probability to be a Honor student given they have taken AP classes and a curtain GPA will be equal to the probability to be a Normal student given they have taken AP classes and have the same GPA. Otherwise known as:
+
+\begin{center}
+$P(H|GPA,AP) = P(N|GPA,AP)$
+\end{center}
+
+\newpage
+By Bayes Rule:
+
+\begin{center}
+$P(H|GPA,AP) = \dfrac{P(GPA,AP|H)P(H)}{P(GPA,AP|H)P(H)+P(GPA,AP|N)P(N)}$
+
+$P(N|GPA,AP) = \dfrac{P(GPA,AP|N)P(N)}{P(GPA,AP|H)P(H)+P(GPA,AP|N)P(N)}$
+\end{center}
+
+Since GPA and AP are independent, this can be rewritten as:
+
+\begin{center}
+$P(H|GPA,AP) = \dfrac{P(GPA|H)P(AP|H)P(H)}{P(GPA|H)P(AP|H)P(H)+P(GPA|N)P(AP|N)P(N)}$
+
+$P(N|GPA,AP) = \dfrac{P(GPA|N)P(AP|N)P(N)}{P(GPA|H)P(AP|H)P(H)+P(GPA|N)P(AP|N)P(N)}$
+\end{center}
+
+Since $P(H|GPA,AP) = P(N|GPA,AP)$ then:
+
+\begin{center}
+$P(GPA|H)P(AP|H)P(H) = P(GPA|N)P(AP|N)P(N)$
+\end{center}
+
+Moving around the equation and sbstituting in $P(H)$, $P(N)$, $P(AP|H)$, and $P(AP|N)$
 
 \section*{2. Gaussian Discriminant Analysis}
-Show that the set of points \textbf{x} such that $p(Y = 0 | x) = p(Y = 1 | x )$ is described by $\textbf{w $\cdot$ x} = b$ for some $\textbf{w}$ and $b$.\\ \\
+\noindent \textit{a.)} Show that the set of points \textbf{x} such that $p(Y = 0 | x) = p(Y = 1 | x )$ is described by $\textbf{w $\cdot$ x} = b$ for some $\textbf{w}$ and $b$.\\ \\
 We can assume that the label probabilities for $Y = 0 \text{ and } Y = 1$ are the same. Which is to say
 \begin{equation}p(Y = 0) = p(Y = 1) = \frac{1}{2}\end{equation}
 Using Bayes Theorem, the conditional probabilities given \textbf{x} are as follows:
@@ -139,7 +170,7 @@ By distributing the $T$,
 \end{equation}
 Now, we can multiply $\Sigma^{-1}(x-\mu_0) \text{ by } (x^T-\mu^T_0)$
 \begin{equation}
-x^T\Sigma^{-1}(x-\mu_0)-\mu^T_1\Sigma^{-1}(x-\mu_0) = x^T\Sigma^{-1}(x-\mu_1)-\mu^T_1\Sigma^{-1}(x-\mu_1)
+x^T\Sigma^{-1}(x-\mu_0)-\mu^T_0\Sigma^{-1}(x-\mu_0) = x^T\Sigma^{-1}(x-\mu_1)-\mu^T_1\Sigma^{-1}(x-\mu_1)
 \end{equation}
 Distributing all terms further, we arrive at
 \begin{equation}
@@ -179,5 +210,6 @@ Since $\Sigma^{-1}$ is symmetric. Since we know that the product on the left sid
 x^T\Sigma^{-1}\mu_i = \mu^T_i \Sigma^{-1}x
 \end{equation}
 
+\noindent \textit{b.)} If $p(Y = 0) \neq p(Y = 1)$, then the reduction performed in part \textit{(a.)} would not hold, as it could only be performed when we made the assumption that $p(Y = 0) = p(Y = 1)$. Thus, the decision boundary would no longer be a hyperplane.
 
 \end{document}
