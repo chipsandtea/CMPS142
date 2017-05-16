@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+\usepackage{fullpage,amsthm,amsfonts,amssymb,epsfig,amsmath,times,amsthm,mathtools,enumitem,amsmath,graphicx}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}[theorem]{Claim}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\newcommand{\abs}[1]{\mid#1\mid}
+\begin{document}
+
+\begin{center}
+{\bf\Large CMPS142 Homework 2}
+\end{center}
+\noindent $\mathbf{Jacob\;Katzeff}$\\
+\noindent $\mathbf{Student\;ID\;1426015}$\\
+\\
+\noindent $\mathbf{Christopher\;Hsiao}$\\
+\noindent $\mathbf{Student\;ID\;1398305}$\\
+
+\section*{1. Naive Bayes}
+\noindent a. Mean and Variance 
+The mean of the GPA's is: 3.13\\
+\indent The variance $\sigma^2$
+
+
+\section*{2. Gaussian Discriminant Analysis}
+\noindent \textit{a.)} Show that the set of points \textbf{x} such that $p(Y = 0 | x) = p(Y = 1 | x )$ is described by $\textbf{w $\cdot$ x} = b$ for some $\textbf{w}$ and $b$.\\ \\
+We can assume that the label probabilities for $Y = 0 \text{ and } Y = 1$ are the same. Which is to say
+\begin{equation}p(Y = 0) = p(Y = 1) = \frac{1}{2}\end{equation}
+Using Bayes Theorem, the conditional probabilities given \textbf{x} are as follows:
+\begin{equation}p(x | Y = 0) = \frac{(Y = 0 | x)p(x)}{p(Y = 0)} \text{ ;   } p(x | Y = 1) = \frac{(Y = 0 | x)p(x)}{p(Y = 1)}\end{equation}
+Thus, we can deduce from $(1)$ and $(2)$ that:
+\begin{equation}p(Y = 0) = \frac{(Y = 0 | x)p(x)}{p(x | Y = 0)} = \frac{(Y = 1 | x)p(x)}{p(x | Y = 1)} = p(Y=1)\end{equation}
+We can deduce from this that:
+\begin{equation}p(Y = 1 | x) \cdot p(x | Y=0) = p(Y = 0 | x) \cdot p(x | Y=1)\end{equation}
+\\
+We are attempting to classify values of $x$ such that $p(Y = 0 | x) = p(Y = 1 | x)$, so we'll assume that this statement is true.
+Since these probabilities are equal, we have 
+\begin{equation}p(Y = 0 | x) = 1 - p(Y = 1 | x)\end{equation}
+Let $P = p(Y = 0|x)$. Then from (5), it follows that $P = 1 - P = p(Y = 1 | x)$.\\
+To sum up thus far, we have:
+\begin{equation}P \cdot p(x | Y = 0) =  P \cdot (x | Y = 1)\end{equation}
+
+Returning to our original models since, we can now see that
+\begin{equation}
+\frac{1}{(2\pi) ^ \frac{n}{2}|\sum| ^ \frac{1}{2}} \cdot \exp{(-\frac{1}{2}((x - \mu_0)^T\sigma^-1(x-\mu_0)))} = \frac{1}{(2\pi) ^ \frac{n}{2}|\sum| ^ \frac{1}{2}} \cdot \exp{(-\frac{1}{2}((x - \mu_1)^T\sigma^-1(x-\mu_1)))}
+\end{equation}
+
+Which we can clearly cancel out the like terms on either side, and we have the equation
+\begin{equation}
+\exp{-\frac{1}{2}((x - \mu_0)^T\sigma^-1(x-\mu_0))} = \exp{-\frac{1}{2}((x - \mu_1)^T\sigma^-1(x-\mu_1))}
+\end{equation}
+We can eliminate the $\exp$ and $-\frac{1}{2}$ by taking the log of both sides of the equation, then cancelling out $-\frac{1}{2}$.\\
+Now, the equation we're solving becomes:
+\begin{equation}
+(x-\mu_0)^T\sigma^-1(x-\mu_0) = (x-\mu_1)^T\sigma^-1(x-\mu_1)
+\end{equation}
+By distributing the $T$, 
+\begin{equation}
+(x^T-\mu^T_0)\sigma^-1(x-\mu_0) = (x^T-\mu^T_1)\sigma^-1(x-\mu_1)
+\end{equation}
+\end{document}
