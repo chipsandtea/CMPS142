@@ -1,215 +1,273 @@
 \documentclass[11pt]{article}
+\usepackage{geometry} 
+\geometry{margin=1in} 
 \usepackage{fullpage,amsthm,amsfonts,amssymb,epsfig,amsmath,times,amsthm,mathtools,enumitem,amsmath,graphicx}
+\usepackage{pgfplots}
+\usepackage{diagbox}
+\usepackage{tikz-qtree}
+\usepackage[retainorgcmds]{IEEEtrantools}
 
-\newtheorem{theorem}{Theorem}
-\newtheorem{claim}[theorem]{Claim}
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\ceil}[1]{\lceil #1 \rceil}
-\newcommand\tab[1][1cm]{\hspace*{#1}}
-\newcommand{\abs}[1]{\mid#1\mid}
+
+\title{CMPS 142 - Homework 4}
+\author{Emily Hockel - echockel@ucsc.edu\\Christopher Hsiao - chhsiao@ucsc.edu}
+\date{May 29, 2017} 
+
 \begin{document}
+\maketitle
+
+\section{Determine Support Vectors}
 
 \begin{center}
-{\bf\Large CMPS142 Homework 2}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = $x_1$,
+    ylabel = $x_2$,
+    xmin = -0.5, xmax = 2.5,
+    ymin = -0.5, ymax = 2.5
+]
+\addplot[only marks, color=blue, mark=+]coordinates{(1,1) (1,2) (2,1)};
+\addplot[only marks, color=red, mark=o]coordinates{(0,0) (1,0) (0,1)};
+\addplot[domain=-0.5:2.5]{1.5 - x};
+\end{axis}
+\end{tikzpicture}
 \end{center}
-\noindent $\mathbf{Connor\;Pryor}$\\
-\noindent $\mathbf{Student\;ID\;1372839}$\\
-\\
-\noindent $\mathbf{Christopher\;Hsiao}$\\
-\noindent $\mathbf{Student\;ID\;1398305}$\\
 
-\section*{1. Naive Bayes}
-Use maximum likelihood estimation (not the unbiased or Laplace estimates) for the distributions of the two features conditioned on the two classes in the figure below. Give the mean and variance of the gaussians you found for the GPA.\newline
+By observing the plot, we see that the support vectors are:
+
+\begin{align*}
+     x^{(1)} & = \begin{bmatrix} 1 \\ 1 \end{bmatrix}, y^{(1)} = +1 \\
+    x^{(2)} & = \begin{bmatrix} 0 \\ 1 \end{bmatrix}, y^{(2)} = -1 \\
+    x^{(3)} & = \begin{bmatrix} 1 \\ 0 \end{bmatrix}, y^{(3)} = -1 \\
+\end{align*}
+   
+
+We use the formula $y^{(i)}(w \cdot x^{(i)} + b) = 1$ to find the maximum margin separating plane. We solve for $w$ and $b$ to find $x_2 = 1.5 - x_1$, where $w = \begin{bmatrix} 2 \\ 2 \end{bmatrix}$ and $b = -3$.
+
+We use the formula $\frac{y^{(i)}(w \cdot x^{(i)} + b)}{||w||}$ to find that the geometric margin for the support vectors is $\frac{\sqrt{2}}{4}$.
+
+
+\section{Support Vector Machine Kernels}
+
+For each of the following problems, we used 10-fold cross validation.
+
+\subsection{RBF Kernel}
+
+	\begin{center}
+        \begin{tabular}{ |c|c|c|c|c|c| } 
+             \hline
+             \diagbox{C}{$\gamma$} &  0.01 & 0.1 & 1 & 10 \\
+             \hline
+             0.1 & 73.1363 & 87.5027 & 89.3719 & 64.2469\\
+             \hline
+             1 & 87.2202 & 92.3712 & 93.0667 & 85.1771\\
+             \hline
+             10 & 92.1539 & 93.6753 & 93.2189 & 85.8726\\
+             \hline
+             100 & 93.3493 &	93.8926 & 92.5668 & 85.8292\\
+             \hline
+             1000 & 93.5884 & 93.4362 & 91.4584 & 85.6336\\
+             \hline
+        \end{tabular}
+        \end{center}
+        
+        We see that the values $C = 1000$ and $\gamma = 0.01$ give us the highest accuracy of 93.59\%. For this data set, a narrow gaussian and a high margin penalty give us the best results.
+        
+\subsection{Polynomial Kernel}
+
+        \begin{center}
+        \begin{tabular}{ |c|c|c|c|c| } 
+             \hline
+             \diagbox{C}{$\gamma$} &  0.01  & 1 & 10 & 100\\
+             \hline
+             0.1 &&&&\\
+             \hline
+             1 & & 81.1997 & 91.2193 &\\
+             \hline
+             10 & & 87.394 & 92.7842 & 91.9365\\
+             \hline
+             100 & 60.5955 & 91.2193 & 92.4364 & 91.2628\\
+             \hline
+             1000 & && 91.9365 &\\
+             \hline
+        \end{tabular}
+        \end{center}
+        
+        With this different kernel, we get just slightly lower accuracy than the RBF kernel. Parameter values of $C = 100$ and $\gamma = 10$ gives us an accuracy of 92.44\%. 
+        
+\subsection{Linear SVM}
+
+        \begin{center}
+        \begin{tabular}{ |c|c| } 
+             \hline
+             C & \\
+             \hline
+             0.1 & 85.1989\\
+             \hline
+             1 & 90.3282\\
+             \hline
+             10 & 92.2408\\
+             \hline
+             100 & 92.9363\\
+             \hline
+             1000 & 93.0233\\
+             \hline
+             10000 & 92.9363\\
+             \hline
+        \end{tabular}
+        \end{center}
+
+	With a linear SVM, we get our highest accuacy of 93.02\% with a value of $C = 1000$.
+\pagebreak
+\section{Greedy Decision Trees}
+We built a dataset based on the logical statement:
+\begin{equation}
+(A \land B) \lor (\neg A \land C)
+\end{equation}
+\subsection{The Dataset}
+Note that the last entry in the dataset has been repeated to demonstrate the pitfalls of the greedy top-down decision tree generation algorithm.
 \begin{center}
-\begin{tabular}{ |c|c|c|c| } 
-\hline
-label & AP & GPA \\
-\hline
-
-H & yes & 4.0 \\ 
-H & yes & 3.7 \\ 
-H & no & 2.5 \\ 
-N & no & 3.8 \\ 
-N & yes & 3.3 \\ 
-N & yes & 3.0 \\ 
-N & no & 3.0 \\ 
-N & no & 2.7 \\ 
-N & no & 2.2 \\
-\hline
-\end{tabular}
+        \begin{tabular}{ |c|c|c|c| } 
+             \hline
+             A & B & C & label\\
+             \hline
+             0 & 0 & 0 & $-$\\
+             \hline
+             1 & 0 & 0 & $-$\\
+             \hline
+             0 & 1 & 0 & $-$\\
+             \hline
+             0 & 0 & 1 & $+$\\
+             \hline
+             1 & 1 & 0 & $+$\\
+             \hline
+             1 & 0 & 1 & $-$\\
+             \hline
+             0 & 1 & 1 & $+$\\
+             \hline
+             1 & 1 & 1 & $+$\\
+             \hline
+             1 & 1 & 0 & $+$\\
+             \hline
+        \end{tabular}
 \end{center}
-
-\noindent \textbf{Mean and Variance}\newline
-
-\noindent Honor Students:\newline
-
-$mean = \dfrac{4.0+3.7+2.5}{3}$\newline
-
-$\hphantom{mean }= 3.4$\newline
-
-$variance = \dfrac{(4.0-3.4)^2 + (3.7-3.4)^2 + (2.5-3.4)^2}{3} $\newline
-
-$\hphantom{variance }= 0.42$\newline
-
-\noindent Normal Students:\newline
-
-$mean = \dfrac{3.8+3.3+3.0+3.0+2.7+2.2}{6}$\newline
-
-$\hphantom{mean }= 3.0$\newline
-
-$variance = \dfrac{(3.8-3.0)^2 + (3.3-3.0)^2 + (3.0-3.0)^2 + (3.0-3.0)^2 + (2.7-3.0)^2 + (2.2-3.0)^2}{6}$\newline
-
-$\hphantom{variance }= 0.243$\newline
-
-\noindent \textbf{Maximum Likelihood Estimation}\newline
-
-\noindent One dimensional Gausians: \newline
-
-
-
+\subsection{The Optimal Tree}
+First, let us take a look at the optimal decision tree.
 \begin{center}
-$p(x) = \dfrac{1}{\sqrt{2\pi}\sigma}e^{-\dfrac{(x-\mu)^2}{2\sigma^2}}$
+\begin{tikzpicture}[every tree node/.style={draw,circle},
+   level distance=1.25cm,sibling distance=1cm,
+   edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}]
+\Tree[.A 
+	\edge node[auto=right] {$0$};
+		[.C 
+			\edge node[auto=right] {$0$};
+			$-$
+			\edge node[auto=left] {$1$};
+			$+$ ]
+	\edge node[auto=left]{1};
+		[.B
+			\edge node[auto=right] {$0$};
+			$-$
+			\edge node[auto=left] {$1$};
+			$+$ ]]
+	
+\end{tikzpicture}
 \end{center}
+This tree has seven nodes, with four leaf nodes representing the predictions.
+\subsection{The Greedy Top-Down Tree}
+For the first iteration of the algorithm, let us see the split for each of the three attributes.\\
+Note that we are using the error rate function, which is the fraction of predictions that are \textbf{not} in the majority of predicted values.\\
 
-\noindent Probability of AP: \newline
+\subsubsection{First Iteration Predictions}
+Below, we have the first iteration predictions and error rates for each attribute value.
+\begin{itemize}
+\item \textbf{A = 0}: $\{-, -, +, +\}$, error: $\frac{2}{4}$
+\item \textbf{A = 1}: $\{-, -, +, +, +\}$, error: $\frac{2}{5}$
+\item \textbf{B = 0}: $\{-, -, -, +\}$, error: $\frac{1}{4}$
+\item \textbf{B = 1}: $\{-, +, +, +, +\}$, error: $\frac{1}{5}$
+\item \textbf{C = 0}: $\{-, -, -, +, +\}$, error: $\frac{2}{5}$
+\item \textbf{C = 1}: $\{-, +, +, +\}$, error: $\frac{1}{4}$
+\end{itemize}
 
-\textit{Given H:}
-
+\noindent The total error across the three attributes are:
 \begin{center}
-$P(AP|H) = \dfrac{P(AP \kern .1cm and \kern .1cm H)}{P(H)} = \dfrac{\frac{2}{9}}{\frac{3}{9}} = \dfrac{2}{3}$
+\textbf{A} = $0.9$; \textbf{B} = $0.45$; \textbf{C} = $0.65$
 \end{center}
-
-\textit{Given N:}
-
+Since \textbf{B} has the lowest error, we'll choose \textbf{B} as our attribute to split on.
+\subsubsection{Second Iteration Predictions: Split on B}
+Now, we find the second iteration predictions and error rates for the remaining attribute values \textbf{A} and \textbf{C}.
+\begin{itemize}
+\item \textbf{B = 0; A = 0}: $\{-, +\}$, error: $\frac{1}{2}$
+\item \textbf{B = 0; A = 1}: $\{-, -\}$, error: $0$
+\item \textbf{B = 1; A = 0}: $\{-, +\}$, error: $\frac{1}{2}$
+\item \textbf{B = 1; A = 1}: $\{+, +, +\}$, error: $0$
+\item \textbf{B = 0; C = 0}: $\{-, -\}$, error: $0$
+\item \textbf{B = 0; C = 1}: $\{+, -\}$, error: $\frac{1}{2}$
+\item \textbf{B = 1; C = 0}: $\{-, +, +\}$, error: $\frac{1}{3}$
+\item \textbf{B = 1; C = 1}: $\{+, +\}$, error: $0$
+\end{itemize}
+\noindent The total error across the two attributes are:
 \begin{center}
-$P(AP|N) = \dfrac{P(AP \kern .1cm and \kern .1cm N)}{P(N)} = \dfrac{\frac{2}{9}}{\frac{6}{9}} = \dfrac{1}{3}$
+\textbf{A} = $1$; \textbf{C} = $0.83$
 \end{center}
-
-\noindent Probability of $\neg$ AP: \newline
-
-\textit{Given H:}
-
+Since \textbf{C} has the lowest error, we'll choose \textbf{C} as our attribute to split on. Note that we split on both branches of \textbf{B}, so we create two \textbf{C} nodes.
+\subsubsection{The Final Iteration}
+This is what the tree now looks like, after the second iteration:
 \begin{center}
-$P(\neg AP|H) = \dfrac{P(\neg AP \kern .1cm and \kern .1cm H)}{P(H)} = \dfrac{\frac{1}{9}}{\frac{3}{9}} = \dfrac{1}{3}$
+\begin{tikzpicture}[every tree node/.style={draw,circle},
+   level distance=1.25cm,sibling distance=1cm,
+   edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}]
+\Tree[.B 
+	\edge node[auto=right] {$0$};
+		[.C 
+			\edge node[auto=right] {$0$};
+			$-$
+			\edge node[auto=left] {$1$};
+			$...$ ]
+	\edge node[auto=left]{1};
+		[.C
+			\edge node[auto=right] {$0$};
+			$...$
+			\edge node[auto=left] {$1$};
+			$+$ ]]
+\end{tikzpicture}
 \end{center}
-
-\textit{Given N:}
-
+Now all that is left is to add the splits on \textbf{A}, for the last four sequences:
 \begin{center}
-$P(\neg AP|N) = \dfrac{P(\neg AP \kern .1cm and \kern .1cm N)}{P(N)} = \dfrac{\frac{4}{9}}{\frac{6}{9}} = \dfrac{2}{3}$
-\end{center}
+\{B = 0; C = 1; A = 0\} = $+$\\
+\{B = 0; C = 1; A = 1\} = $-$\\
+\{B = 1; C = 0; A = 0\} = $-$\\
+\{B = 1; C = 0; A = 1\} = $+$
+\end{center}	
 
-\noindent Predict Honor or Normal given AP and GPA:\newline
-
-To predict if a student is a Honor or Normal student given AP and a Gausian distribution of the GPA. The decision boundary for Honor and Normal will be the same. This means the probability to be a Honor student given they have taken AP classes and a curtain GPA will be equal to the probability to be a Normal student given they have taken AP classes and have the same GPA. Otherwise known as:
-
+Adding these last few nodes to our tree, we get the full decision tree:
 \begin{center}
-$P(H|GPA,AP) = P(N|GPA,AP)$
+\begin{tikzpicture}[every tree node/.style={draw,circle},
+   level distance=1.25cm,sibling distance=1cm,
+   edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}]
+\Tree[.B 
+	\edge node[auto=right] {$0$};
+		[.C 
+			\edge node[auto=right] {$0$};
+			$-$
+			\edge node[auto=left] {$1$};
+			[.A
+				\edge node[auto=right] {$0$};
+				$+$
+				\edge node[auto=left] {$1$};
+				$-$ ]]
+	\edge node[auto=left]{1};
+		[.C
+			\edge node[auto=right] {$0$};
+			[.A
+				\edge node[auto=right] {$0$};
+				$-$
+				\edge node[auto=left] {$1$};
+				$+$ ]
+			\edge node[auto=left] {$1$};
+			$+$ ]]
+\end{tikzpicture}
 \end{center}
-
-\newpage
-By Bayes Rule:
-
-\begin{center}
-$P(H|GPA,AP) = \dfrac{P(GPA,AP|H)P(H)}{P(GPA,AP|H)P(H)+P(GPA,AP|N)P(N)}$
-
-$P(N|GPA,AP) = \dfrac{P(GPA,AP|N)P(N)}{P(GPA,AP|H)P(H)+P(GPA,AP|N)P(N)}$
-\end{center}
-
-Since GPA and AP are independent, this can be rewritten as:
-
-\begin{center}
-$P(H|GPA,AP) = \dfrac{P(GPA|H)P(AP|H)P(H)}{P(GPA|H)P(AP|H)P(H)+P(GPA|N)P(AP|N)P(N)}$
-
-$P(N|GPA,AP) = \dfrac{P(GPA|N)P(AP|N)P(N)}{P(GPA|H)P(AP|H)P(H)+P(GPA|N)P(AP|N)P(N)}$
-\end{center}
-
-Since $P(H|GPA,AP) = P(N|GPA,AP)$ then:
-
-\begin{center}
-$P(GPA|H)P(AP|H)P(H) = P(GPA|N)P(AP|N)P(N)$
-\end{center}
-
-Moving around the equation and sbstituting in $P(H)$, $P(N)$, $P(AP|H)$, and $P(AP|N)$
-
-\section*{2. Gaussian Discriminant Analysis}
-\noindent \textit{a.)} Show that the set of points \textbf{x} such that $p(Y = 0 | x) = p(Y = 1 | x )$ is described by $\textbf{w $\cdot$ x} = b$ for some $\textbf{w}$ and $b$.\\ \\
-We can assume that the label probabilities for $Y = 0 \text{ and } Y = 1$ are the same. Which is to say
-\begin{equation}p(Y = 0) = p(Y = 1) = \frac{1}{2}\end{equation}
-Using Bayes Theorem, the conditional probabilities given \textbf{x} are as follows:
-\begin{equation}p(x | Y = 0) = \frac{(Y = 0 | x)p(x)}{p(Y = 0)} \text{ ;   } p(x | Y = 1) = \frac{(Y = 0 | x)p(x)}{p(Y = 1)}\end{equation}
-Thus, we can deduce from $(1)$ and $(2)$ that:
-\begin{equation}p(Y = 0) = \frac{(Y = 0 | x)p(x)}{p(x | Y = 0)} = \frac{(Y = 1 | x)p(x)}{p(x | Y = 1)} = p(Y=1)\end{equation}
-We can deduce from this that:
-\begin{equation}p(Y = 1 | x) \cdot p(x | Y=0) = p(Y = 0 | x) \cdot p(x | Y=1)\end{equation}
-\\
-We are attempting to classify values of $x$ such that $p(Y = 0 | x) = p(Y = 1 | x)$, so we'll assume that this statement is true.
-Since these probabilities are equal, we have 
-\begin{equation}p(Y = 0 | x) = 1 - p(Y = 1 | x)\end{equation}
-Let $P = p(Y = 0|x)$. Then from (5), it follows that $P = 1 - P = p(Y = 1 | x)$.\\
-To sum up thus far, we have:
-\begin{equation}P \cdot p(x | Y = 0) =  P \cdot (x | Y = 1)\end{equation}
-
-Returning to our original models since, we can now see that
-\begin{equation}
-\frac{1}{(2\pi) ^ \frac{n}{2}|\sum| ^ \frac{1}{2}} \cdot \exp{(-\frac{1}{2}((x - \mu_0)^T\Sigma^{-1}(x-\mu_0)))} = \frac{1}{(2\pi) ^ \frac{n}{2}|\sum| ^ \frac{1}{2}} \cdot \exp{(-\frac{1}{2}((x - \mu_1)^T\Sigma^{-1}(x-\mu_1)))}
-\end{equation}
-
-Which we can clearly cancel out the like terms on either side, and we have the equation
-\begin{equation}
-\exp{-\frac{1}{2}((x - \mu_0)^T\Sigma^{-1}(x-\mu_0))} = \exp{-\frac{1}{2}((x - \mu_1)^T\Sigma^{-1}(x-\mu_1))}
-\end{equation}
-We can eliminate the $\exp$ and $-\frac{1}{2}$ by taking the log of both sides of the equation, then cancelling out $-\frac{1}{2}$.\\
-Now, the equation we're solving becomes:
-\begin{equation}
-(x-\mu_0)^T\Sigma^{-1}(x-\mu_0) = (x-\mu_1)^T\Sigma^{-1}(x-\mu_1)
-\end{equation}
-By distributing the $T$, 
-\begin{equation}
-(x^T-\mu^T_0)\Sigma^{-1}(x-\mu_0) = (x^T-\mu^T_1)\Sigma^{-1}(x-\mu_1)
-\end{equation}
-Now, we can multiply $\Sigma^{-1}(x-\mu_0) \text{ by } (x^T-\mu^T_0)$
-\begin{equation}
-x^T\Sigma^{-1}(x-\mu_0)-\mu^T_0\Sigma^{-1}(x-\mu_0) = x^T\Sigma^{-1}(x-\mu_1)-\mu^T_1\Sigma^{-1}(x-\mu_1)
-\end{equation}
-Distributing all terms further, we arrive at
-\begin{equation}
-x^T\Sigma^{-1}x -x^T\Sigma^{-1}\mu_0 - \mu^T_0\Sigma^{-1}x + \mu^T_0\Sigma^{-1}\mu_0 = x^T\Sigma^{-1}x -x^T\Sigma^{-1}\mu_1 - \mu^T_1\Sigma^{-1}x + \mu^T_1\Sigma^{-1}\mu_1
-\end{equation}
-To reduce from here, we use the property of taking the transpose of a product (equation 18, below) to find that:
-\begin{equation}
--2\mu^T_0\Sigma^{-1}x + \mu^T_0\Sigma^{-1}\mu_0 = -2\mu^T_1\Sigma^{-1}x + \mu^T_1\Sigma^{-1}\mu_1
-\end{equation}
-We group $-2\mu^T_0\Sigma^{-1}x \text{ and } -2\mu^T_1\Sigma^{-1}x$ and reduce to get
-\begin{equation}
-2(\mu^T_0\Sigma^{-1} - \mu^T_1\Sigma^{-1}) \cdot x = \mu^T_1\Sigma^{-1}\mu_1 - \mu^T_0\Sigma^{-1}\mu_0
-\end{equation}
-And by simply dividing the equation by $2$, we end up with
-\begin{equation}
-(\mu^T_0\Sigma^{-1} - \mu^T_1\Sigma^{-1}) \cdot x = \frac{1}{2}(\mu^T_1\Sigma^{-1}\mu_1 - \mu^T_0\Sigma^{-1}\mu_0)
-\end{equation}
-
-
-\noindent Observe that $\mu^T_0\Sigma^{-1} - \mu^T_1\Sigma^{-1}$ is a vector, as $\mu_0$ and $\mu_1$ are vectors. We will call this vector $w$.\\
-
-\noindent Observe further that $\mu^T_1\Sigma^{-1}\mu_1 - \mu^T_0\Sigma^{-1}\mu_0$ is a scalar, because the product of a vector and its transpose yields a scalar. We will call this scalar $b$.\\
-
-\noindent We now have the equation
-\begin{equation}
-w \cdot x = b
-\end{equation}
-Recall that the original assumption made was that $p(Y=0|x) = p(Y=1|x)$. As such, this assumption implies that there exists some vector $w$ and some scalar $b$ such that $w \cdot x = b$ lies on the hyperplane.
-
-\subsection*{Property of Taking the Transpose of a Product}
-Take note of the following property of taking the transpose of a product, that allows us to say:
-\begin{equation}
-(x^T\Sigma^{-1}\mu_i)^T = \mu^T_i \Sigma^{-1}x
-\end{equation}
-Since $\Sigma^{-1}$ is symmetric. Since we know that the product on the left side of (9) itself is a scalar, we can then also drop the transpose, where the equation then becomes:
-\begin{equation}
-x^T\Sigma^{-1}\mu_i = \mu^T_i \Sigma^{-1}x
-\end{equation}
-
-\noindent \textit{b.)} If $p(Y = 0) \neq p(Y = 1)$, then the reduction performed in part \textit{(a.)} would not hold, as it could only be performed when we made the assumption that $p(Y = 0) = p(Y = 1)$. Thus, the decision boundary would no longer be a hyperplane.
-
+This is the decision tree output by the greedy top-down algorithm. This tree has $11$ nodes, and $6$ leaf nodes.\\
+Recall from \textbf{3.2} that the optimal tree has $7$ nodes, with $4$ leaf nodes. Clearly, this tree is not optimal.
 \end{document}
