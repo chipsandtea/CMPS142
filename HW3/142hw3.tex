@@ -130,7 +130,81 @@ Since $P(H|GPA,AP) = P(N|GPA,AP)$ then:
 $P(GPA|H)P(AP|H)P(H) = P(GPA|N)P(AP|N)P(N)$
 \end{center}
 
-Moving around the equation and sbstituting in $P(H)$, $P(N)$, $P(AP|H)$, and $P(AP|N)$
+Moving around the equation:
+
+\begin{center}
+$\dfrac{P(AP|H)P(H)}{P(AP|N)P(N)} = \dfrac{P(GPA|N)}{P(GPA|H)}$
+\end{center}
+
+Let
+\begin{center}
+$P(GPA|H) = \dfrac{1}{\sqrt{2\pi}\sigma_H}e^{-\dfrac{(x-\mu_H)^2}{2\sigma_H^2}}$
+\end{center}
+$\kern 4cm$ and
+\begin{center}
+$P(GPA|N) = \dfrac{1}{\sqrt{2\pi}\sigma_N}e^{-\dfrac{(x-\mu_N)^2}{2\sigma_N^2}}$
+\end{center}
+
+Then,
+
+\begin{center}
+$\dfrac{P(AP|H)P(H)}{P(AP|N)P(N)} = \dfrac{P(GPA|N)}{P(GPA|H)} = \dfrac{\dfrac{1}{\sqrt{2\pi}\sigma_N}e^{-\dfrac{(x-\mu_N)^2}{2\sigma_N^2}}}{\dfrac{1}{\sqrt{2\pi}\sigma_H}e^{-\dfrac{(x-\mu_H)^2}{2\sigma_H^2}}}$
+\end{center}
+
+Or:
+\begin{center}
+$\dfrac{\sigma_N P(AP|H)P(H)}{\sigma_H P(AP|N)P(N)} = \dfrac{e^{-\dfrac{(x-\mu_N)^2}{2\sigma_N^2}}}{e^{-\dfrac{(x-\mu_H)^2}{2\sigma_H^2}}}$
+\end{center}
+
+Taking the natural log of both sides gives:
+
+\begin{center}
+$ln \bigg( \dfrac{\sigma_N P(AP|H)P(H)}{\sigma_H P(AP|N)P(N)} \bigg) = {\dfrac{(x-\mu_H)^2}{2\sigma_H^2}} - \dfrac{(x-\mu_N)^2}{2\sigma_N^2}$
+\end{center}
+
+Simplifying gives:
+\begin{center}
+$2\sigma_N^2\sigma_H^2ln \bigg( \dfrac{\sigma_N P(AP|H)P(H)}{\sigma_H P(AP|N)P(N)} \bigg) = \sigma^2_N (x-\mu_H)^2 - \sigma^2_H (x-\mu_N)^2$
+\end{center}
+
+Expanding out and combining like terms finally gives:
+\begin{center}
+$2\sigma_N^2\sigma_H^2ln \bigg( \dfrac{\sigma_N P(AP|H)P(H)}{\sigma_H P(AP|N)P(N)} \bigg) = x^2(\sigma_N^2-\sigma_H^2) + 2x(\mu_N\sigma_H^2-\mu_H\sigma_N^2)+(\mu_H^2\sigma_N^2 - \mu_N^2\sigma_H^2)$
+\end{center}
+
+Now we have a quadratic equation where all the values are constant besides x. Substituting in the values from above and solving for x we get:
+
+\begin{center}
+$x = 1.53654$ and $x = 3.36515$
+\end{center}
+
+This tells us that if AP courses are taken:\newline
+
+Predict N if the GPA is between $(1.53654, 3.36515)$\newline
+
+Predict H if the GPA is between $(0, 1.53654)$ or $(3.36515, >4.0)$\newline
+
+
+\noindent Predict Honor or Normal given $\neg$ AP and GPA:\newline
+
+A similar process can be done do determine the range of GPA given $\neg$ AP by finding the formula:
+
+\begin{center}
+$2\sigma_N^2\sigma_H^2ln \bigg( \dfrac{\sigma_N P(\neg AP|H)P(H)}{\sigma_H P(\neg AP|N)P(N)} \bigg) = x^2(\sigma_N^2-\sigma_H^2) + 2x(\mu_N\sigma_H^2-\mu_H\sigma_N^2)+(\mu_H^2\sigma_N^2 - \mu_N^2\sigma_H^2)$
+\end{center}
+
+Now we have a quadratic equation where all the values are constant besides x. Substituting in the values from above and solving for x we get:
+
+\begin{center}
+$x = 0.885859$ and $x = 4.012254$
+\end{center}
+
+This tells us that if AP courses are not taken:\newline
+
+Predict N if the GPA is between $(0.885859, 4.012254)$\newline
+
+Predict H if the GPA is between $(0, 0.885859)$ or $(4.012254, >4.012254)$\newline
+
 
 \section*{2. Gaussian Discriminant Analysis}
 \noindent \textit{a.)} Show that the set of points \textbf{x} such that $p(Y = 0 | x) = p(Y = 1 | x )$ is described by $\textbf{w $\cdot$ x} = b$ for some $\textbf{w}$ and $b$.\\ \\
